@@ -1,0 +1,21 @@
+# Minimal Python image for secure code execution
+FROM python:3.11-slim
+
+# Create a non-root user for security
+RUN useradd -m -u 1000 coderunner
+
+# Set working directory
+WORKDIR /app
+
+# Install basic Python packages that beginners might need
+RUN pip install --no-cache-dir \
+    requests \
+    matplotlib \
+    numpy \
+    pandas
+
+# Switch to non-root user
+USER coderunner
+
+# Default command
+CMD ["python"]

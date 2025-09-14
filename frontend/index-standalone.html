@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python IDE - Beginner Friendly</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            height: 100vh;
+            background: #ffffff;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            height: 48px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toolbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #007bff;
+        }
+
+        .current-file {
+            font-size: 14px;
+            color: #6c757d;
+            padding: 4px 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .toolbar-center {
+            display: flex;
+            gap: 12px;
+        }
+
+        .toolbar-button {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            background: transparent;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toolbar-button:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        .run-button {
+            background: #28a745;
+            color: white;
+            font-weight: 500;
+        }
+
+        .run-button:hover {
+            background: #1e7e34;
+        }
+
+        .explain-button {
+            background: #007bff;
+            color: white;
+            font-weight: 500;
+        }
+
+        .explain-button:hover {
+            background: #0056b3;
+        }
+
+        .theme-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            padding: 8px;
+            justify-content: center;
+        }
+
+        .app-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .file-explorer {
+            width: 250px;
+            background: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-explorer-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid #dee2e6;
+            background: #ffffff;
+        }
+
+        .file-explorer-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-list {
+            flex: 1;
+            padding: 8px 0;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .file-item:hover {
+            background: #e9ecef;
+        }
+
+        .file-item.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .file-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor {
+            flex: 0.7;
+            position: relative;
+        }
+
+        #code-editor {
+            width: 100%;
+            height: 100%;
+            border: none;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            padding: 16px;
+            resize: none;
+            outline: none;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .terminal {
+            flex: 0.3;
+            background: #1e1e1e;
+            color: #cccccc;
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+        }
+
+        .terminal-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .clear-button {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 3px;
+            background: transparent;
+            color: #cccccc;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .clear-button:hover {
+            background: #3e3e42;
+        }
+
+        .terminal-content {
+            flex: 1;
+            padding: 8px 12px;
+            overflow-y: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .terminal-line {
+            margin: 2px 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .terminal-command {
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .terminal-error {
+            color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+            border-left: 3px solid #dc3545;
+            margin: 4px 0;
+        }
+
+        .terminal-ai {
+            color: #007bff;
+            font-weight: 500;
+            border-bottom: 1px solid #3e3e42;
+            padding: 4px 0;
+            margin: 4px 0;
+        }
+
+        /* Dark theme */
+        .dark-theme {
+            background: #1e1e1e;
+            color: #cccccc;
+        }
+
+        .dark-theme .toolbar {
+            background: #2d2d30;
+            border-bottom-color: #3e3e42;
+        }
+
+        .dark-theme .toolbar-title {
+            color: #0078d4;
+        }
+
+        .dark-theme .current-file {
+            background: #3e3e42;
+            color: #cccccc;
+        }
+
+        .dark-theme .toolbar-button {
+            color: #cccccc;
+        }
+
+        .dark-theme .toolbar-button:hover {
+            background: #3e3e42;
+        }
+
+        .dark-theme .file-explorer {
+            background: #2d2d30;
+            border-right-color: #3e3e42;
+        }
+
+        .dark-theme .file-explorer-header {
+            background: #1e1e1e;
+            border-bottom-color: #3e3e42;
+        }
+
+        .dark-theme .file-item:hover {
+            background: #3e3e42;
+        }
+
+        .dark-theme #code-editor {
+            background: #1e1e1e;
+            color: #cccccc;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6c757d;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #28a745;
+            margin-right: 8px;
+        }
+
+        .status-indicator.disconnected {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="app" id="app">
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <h1 class="toolbar-title">🐍 Python IDE</h1>
+                <div class="status-indicator" id="status-indicator" title="Backend connection status"></div>
+                <span class="current-file" id="current-file">main.py</span>
+            </div>
+            
+            <div class="toolbar-center">
+                <button class="toolbar-button run-button" id="run-button" onclick="runCode()">
+                    ▶️ Run Code
+                </button>
+                
+                <button class="toolbar-button explain-button" id="explain-button" onclick="explainCode()">
+                    🤖 Explain Code
+                </button>
+            </div>
+            
+            <div class="toolbar-right">
+                <button class="toolbar-button theme-button" onclick="toggleTheme()" title="Toggle theme">
+                    🌓
+                </button>
+            </div>
+        </div>
+        
+        <div class="app-body">
+            <div class="file-explorer">
+                <div class="file-explorer-header">
+                    <h3>📁 Explorer</h3>
+                </div>
+                <div class="file-list">
+                    <div class="file-item active" onclick="selectFile('main.py', this)">
+                        <span class="file-icon">🐍</span>
+                        <span>main.py</span>
+                    </div>
+                    <div class="file-item" onclick="selectFile('calculator.py', this)">
+                        <span class="file-icon">🧮</span>
+                        <span>calculator.py</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="editor-container">
+                <div class="editor">
+                    <textarea id="code-editor" placeholder="Write your Python code here..."># Welcome to Python IDE
+# Write your Python code here
+
+print("Hello, World!")
+
+# Example function
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("Python"))</textarea>
+                </div>
+                
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-title">
+                            <span>💻</span>
+                            <span>Terminal</span>
+                        </div>
+                        <button class="clear-button" onclick="clearTerminal()">Clear</button>
+                    </div>
+                    <div class="terminal-content" id="terminal-content">
+                        <div class="terminal-line">Welcome to Python IDE Terminal</div>
+                        <div class="terminal-line">Ready to execute Python code...</div>
+                        <div class="terminal-line">Press "Run Code" or Ctrl+Enter to execute</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // File management
+        const files = {
+            'main.py': `# Welcome to Python IDE
+# Write your Python code here
+
+print("Hello, World!")
+
+# Example function
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("Python"))`,
+            'calculator.py': `# Simple Calculator
+
+def add(x, y):
+    return x + y
+
+def subtract(x, y):
+    return x - y
+
+def multiply(x, y):
+    return x * y
+
+def divide(x, y):
+    if y != 0:
+        return x / y
+    else:
+        return "Error: Division by zero!"
+
+# Test the functions
+print(add(5, 3))
+print(subtract(10, 4))
+print(multiply(3, 7))
+print(divide(15, 3))`
+        };
+
+        let currentFile = 'main.py';
+        let isDarkTheme = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkBackendStatus();
+            setupKeyboardShortcuts();
+        });
+
+        // File selection
+        function selectFile(filename, element) {
+            // Save current file content
+            const editor = document.getElementById('code-editor');
+            files[currentFile] = editor.value;
+
+            // Switch to new file
+            currentFile = filename;
+            editor.value = files[filename] || '';
+            document.getElementById('current-file').textContent = filename;
+
+            // Update UI
+            document.querySelectorAll('.file-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            const app = document.getElementById('app');
+            if (isDarkTheme) {
+                app.classList.add('dark-theme');
+            } else {
+                app.classList.remove('dark-theme');
+            }
+        }
+
+        // Terminal functions
+        function addToTerminal(message, className = '') {
+            const terminal = document.getElementById('terminal-content');
+            const line = document.createElement('div');
+            line.className = `terminal-line ${className}`;
+            line.textContent = message;
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function clearTerminal() {
+            document.getElementById('terminal-content').innerHTML = '';
+        }
+
+        // Backend communication
+        async function checkBackendStatus() {
+            try {
+                const response = await fetch('http://localhost:8000/api/health');
+                const data = await response.json();
+                
+                const indicator = document.getElementById('status-indicator');
+                if (response.ok) {
+                    indicator.classList.remove('disconnected');
+                    indicator.title = `Backend connected (Python ${data.python_version})`;
+                    addToTerminal(`✅ Backend connected (Python ${data.python_version})`);
+                    if (data.ai_available) {
+                        addToTerminal('🤖 AI explanations available');
+                    } else {
+                        addToTerminal('ℹ️  AI explanations not configured (OpenAI key needed)');
+                    }
+                } else {
+                    throw new Error('Backend not responding');
+                }
+            } catch (error) {
+                const indicator = document.getElementById('status-indicator');
+                indicator.classList.add('disconnected');
+                indicator.title = 'Backend disconnected';
+                addToTerminal('❌ Cannot connect to backend server', 'terminal-error');
+                addToTerminal('Make sure the Python backend is running on port 8000', 'terminal-error');
+            }
+        }
+
+        // Code execution
+        async function runCode() {
+            const code = document.getElementById('code-editor').value;
+            if (!code.trim()) {
+                addToTerminal('No code to run', 'terminal-error');
+                return;
+            }
+
+            // Save current file
+            files[currentFile] = code;
+
+            addToTerminal(`> Running ${currentFile}`, 'terminal-command');
+
+            try {
+                const response = await fetch('http://localhost:8000/api/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ code: code }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (result.output) {
+                        result.output.split('\n').forEach(line => {
+                            if (line.trim()) {
+                                addToTerminal(line);
+                            }
+                        });
+                    } else {
+                        addToTerminal('Code executed successfully (no output)');
+                    }
+                } else {
+                    addToTerminal(`Error in ${currentFile}`, 'terminal-error');
+                    if (result.error) {
+                        addToTerminal(result.error, 'terminal-error');
+                    }
+                }
+            } catch (error) {
+                addToTerminal('Connection error', 'terminal-error');
+                addToTerminal('Could not connect to Python execution server', 'terminal-error');
+                checkBackendStatus(); // Recheck connection
+            }
+        }
+
+        // Code explanation
+        async function explainCode() {
+            const code = document.getElementById('code-editor').value;
+            if (!code.trim()) {
+                addToTerminal('No code to explain', 'terminal-error');
+                return;
+            }
+
+            addToTerminal(`> Explaining ${currentFile}`, 'terminal-command');
+
+            try {
+                const response = await fetch('http://localhost:8000/api/explain', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ code: code }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    addToTerminal('--- AI Code Explanation ---', 'terminal-ai');
+                    result.explanation.split('\n').forEach(line => {
+                        if (line.trim()) {
+                            addToTerminal(line);
+                        }
+                    });
+                    addToTerminal('--- End Explanation ---', 'terminal-ai');
+                } else {
+                    addToTerminal('Error explaining code', 'terminal-error');
+                    if (result.error) {
+                        addToTerminal(result.error, 'terminal-error');
+                    }
+                }
+            } catch (error) {
+                addToTerminal('Connection error', 'terminal-error');
+                addToTerminal('Could not connect to AI explanation service', 'terminal-error');
+            }
+        }
+
+        // Keyboard shortcuts
+        function setupKeyboardShortcuts() {
+            document.getElementById('code-editor').addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    runCode();
+                }
+            });
+        }
+
+        // Auto-save current file content
+        document.getElementById('code-editor').addEventListener('input', function() {
+            files[currentFile] = this.value;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+.code-editor {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background-color: var(--bg-primary);
+}
+
+.editor-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}

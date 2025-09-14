@@ -1,0 +1,20 @@
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.app-body {
+  flex: 1;
+  overflow: hidden;
+}
+
+.split-horizontal {
+  height: 100%;
+}
+
+.split-vertical {
+  height: 100%;
+}

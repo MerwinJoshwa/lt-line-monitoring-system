@@ -1,0 +1,68 @@
+# ESP8266 LT Line Monitoring - Required Libraries
+
+## Install these libraries via Arduino IDE Library Manager:
+
+1. ESP8266WiFi (ESP8266 Core) - WiFi connectivity
+2. ESP8266HTTPClient (ESP8266 Core) - HTTP requests
+3. ArduinoJson by Benoit Blanchon - JSON serialization
+4. Adafruit ADS1X15 by Adafruit - ADC for current sensor
+5. NTPClient by Fabrice Weinberg - Network time synchronization
+6. WiFiUdp (ESP8266 Core) - UDP for NTP
+
+## Installation Steps:
+
+1. Open Arduino IDE
+2. Go to Tools > Manage Libraries
+3. Search for each library and click "Install"
+4. Install ESP8266 board package:
+   - Go to File > Preferences
+   - Add this URL to Additional Boards Manager URLs:
+     http://arduino.esp8266.com/stable/package_esp8266com_index.json
+   - Go to Tools > Board > Boards Manager
+   - Search for "esp8266" and install the ESP8266 Community package
+
+## Hardware Wiring:
+
+### ZMPT101B Voltage Sensor:
+- VCC → 3.3V
+- GND → GND
+- OUT → A0
+
+### ADS1115 ADC Module:
+- VCC → 3.3V
+- GND → GND
+- SDA → D2 (GPIO4)
+- SCL → D1 (GPIO5)
+
+### SCT-013 Current Sensor:
+- Connect to ADS1115 Channel 0 (A0)
+- Use burden resistor (33Ω) and voltage divider
+- Add 2.5V bias for AC signal
+
+### Status LED:
+- Uses built-in LED (GPIO2/D4)
+- No external wiring needed
+
+## Configuration:
+
+Before uploading, update these values in the code:
+- WIFI_SSID: Your WiFi network name
+- WIFI_PASSWORD: Your WiFi password
+- SERVER_URL: Your Flask server IP address (e.g., http://192.168.1.100:5000)
+- TRANSFORMER_ID: Unique ID for this transformer (e.g., TX001)
+
+## Calibration:
+
+You may need to adjust these calibration values based on your sensors:
+- VOLTAGE_CALIBRATION: Adjust for accurate voltage reading
+- CURRENT_CALIBRATION: Adjust for accurate current reading
+- TRIP_THRESHOLD: Current threshold for trip detection
+
+## Testing:
+
+1. Upload the code to ESP8266
+2. Open Serial Monitor (115200 baud)
+3. Watch for initialization messages
+4. Verify WiFi connection
+5. Check sensor readings
+6. Confirm data transmission to server
