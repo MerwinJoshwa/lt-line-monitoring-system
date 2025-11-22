@@ -2,7 +2,7 @@
 
 A complete IoT-based monitoring solution for Low Tension (LT) distribution lines with real-time data visualization and automatic trip detection.
 
-## 🚀 Features
+## Features
 
 - **Real-time Monitoring**: Live voltage, current, and line status monitoring
 - **Trip Detection**: Automatic detection of line breaks/snapped wires
@@ -12,7 +12,7 @@ A complete IoT-based monitoring solution for Low Tension (LT) distribution lines
 - **IoT Integration**: ESP8266-based sensor nodes
 - **RESTful API**: Complete backend API for data management
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 python-ide/
@@ -50,7 +50,7 @@ python-ide/
 - **ADS1115**: 16-bit ADC for precise current readings
 - **ESP8266**: WiFi microcontroller for data transmission
 
-## 📋 Prerequisites
+##  Prerequisites
 
 ### Software Requirements
 - Python 3.8+ 
@@ -65,7 +65,7 @@ python-ide/
 - ADS1115 16-bit ADC
 - Breadboard and jumper wires
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### 1. Database Setup
 
@@ -128,7 +128,7 @@ python -m http.server 8000
 
 4. **Upload the code** to ESP8266
 
-## 📊 API Endpoints
+##  API Endpoints
 
 ### Transformer Management
 - `POST /add_transformer` - Register new transformer
@@ -183,7 +183,7 @@ SCT-013 Current Sensor:
 └── Connect to ADS1115 A0 with burden resistor circuit
 ```
 
-## 🎯 Dashboard Features
+##  Dashboard Features
 
 ### Real-time Monitoring Cards
 - **Voltage Card**: Shows current voltage with status indication
@@ -200,7 +200,7 @@ SCT-013 Current Sensor:
 - **Audio Alerts**: Sound notifications for critical events
 - **Status Dashboard**: Connection and system status
 
-## 🛡️ Trip Detection Logic
+##  Trip Detection Logic
 
 The system detects line trips using the following algorithm:
 
@@ -209,7 +209,7 @@ The system detects line trips using the following algorithm:
 3. **Confirmation**: Trip status maintained until current returns to normal
 4. **Alert Generation**: Immediate notification to dashboard and operators
 
-## 🔧 Configuration Options
+##  Configuration Options
 
 ### Backend Configuration (.env)
 ```env
@@ -243,7 +243,7 @@ const CONFIG = {
 #define READING_INTERVAL 5000  // 5 seconds
 ```
 
-## 📱 Dashboard Screenshots
+##  Dashboard Screenshots
 
 The dashboard provides:
 - **Professional DISCOM Interface**: Clean, modern design
@@ -252,7 +252,7 @@ The dashboard provides:
 - **Responsive Layout**: Works on desktop, tablet, and mobile
 - **Alert Modals**: Instant trip notifications
 
-## 🚨 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues:
 
@@ -276,7 +276,7 @@ The dashboard provides:
    - Adjust calibration values
    - Verify sensor power supply
 
-## 📈 Scaling and Production
+##  Scaling and Production
 
 For production deployment:
 
@@ -286,7 +286,7 @@ For production deployment:
 4. **Security**: Add authentication and HTTPS
 5. **Monitoring**: Add logging and health checks
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/AmazingFeature`)
@@ -294,18 +294,18 @@ For production deployment:
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open Pull Request
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 👥 Support
+##  Support
 
 For support and questions:
 - Create an issue in the repository
 - Check troubleshooting section
 - Review hardware wiring diagrams
 
-## 🎉 Acknowledgments
+##  Acknowledgments
 
 - Flask community for excellent web framework
 - Chart.js for beautiful data visualization
